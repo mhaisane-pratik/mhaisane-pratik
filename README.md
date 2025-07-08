@@ -1,5 +1,5 @@
 # 💫 About Me:
-Hello! I'm Aatrey Warke, a passionate and dedicated Full Stack Developer specializing in MERN stack with expertise in Next.js and TypeScript. My journey in web development has been driven by a relentless curiosity and a desire to create impactful, efficient, and user-friendly applications.Growing and learning everyday, I am always looking for new opportunities to collaborate and create something amazing
+Hello! I'm Pratik Mhainsane, a passionate and dedicated Full Stack Developer specializing in MERN stack with expertise in Next.js and TypeScript. My journey in web development has been driven by a relentless curiosity and a desire to create impactful, efficient, and user-friendly applications.Growing and learning everyday, I am always looking for new opportunities to collaborate and create something amazing
 
 
 ## 🌐 Socials:
