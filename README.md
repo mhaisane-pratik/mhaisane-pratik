@@ -1,6 +1,26 @@
 # 💫 About Me:
 Hello! I'm Pratik Mhainsane, a passionate and dedicated Full Stack Developer specializing in MERN stack with expertise in Next.js and TypeScript. My journey in web development has been driven by a relentless curiosity and a desire to create impactful, efficient, and user-friendly applications.Growing and learning everyday, I am always looking for new opportunities to collaborate and create something amazing
 
+## 💬 Chat Search Feature:
+Check out my [Chat Search Application](./chat-search.html) - A simple, interactive tool to search and filter chat messages from the last 2 days. Features include:
+- Real-time search functionality
+- Filter messages by: All, Today, Yesterday, Last 2 Days
+- Add test messages to see it in action
+- Clean, modern UI with smooth animations
+
+## 📁 Group Management Accordion:
+Explore my [Group Management System](./group-accordion.html) - An interactive accordion interface with complete group management capabilities. Features include:
+- **Three-dot menu (⋮)** in the top-right corner with options:
+  - Create Group
+  - Clear All Groups
+  - Export Data
+- **Accordion interface** with expandable/collapsible sections
+- **Group creation** with name, description, and members
+- **Edit and delete** functionality for each group
+- **localStorage database** - All data persists across page refreshes
+- **Real-time statistics** showing total groups and last update time
+- Beautiful gradient UI with smooth animations
+
 
 ## 🌐 Socials:
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin&logoColor=white)](https://linkedin.com/in/https://www.linkedin.com/in/pratik-mhaisane/)
