@@ -175,7 +175,7 @@
         }
         
         .accordion-content.show {
-            max-height: 500px;
+            max-height: 1000px;
             border-top: 2px solid #e0e0e0;
         }
         
@@ -240,20 +240,6 @@
         .btn-delete:hover {
             background: #c82333;
             transform: translateY(-2px);
-        }
-        
-        .btn-dots {
-            background: transparent;
-            border: 2px solid #667eea;
-            color: #667eea;
-            padding: 5px 12px;
-            font-size: 1.2rem;
-            font-weight: bold;
-        }
-        
-        .btn-dots:hover {
-            background: #667eea;
-            color: white;
         }
         
         .modal {
@@ -548,7 +534,7 @@
             } else {
                 // Create new group
                 const newGroup = {
-                    id: Date.now().toString(),
+                    id: Date.now().toString() + '-' + Math.random().toString(36).substr(2, 9),
                     name: name,
                     description: description,
                     members: members,
@@ -625,7 +611,6 @@
                     <div class="accordion-header" id="header-${group.id}" onclick="toggleAccordion('${group.id}')">
                         <div class="accordion-title">${escapeHtml(group.name)}</div>
                         <div class="accordion-actions">
-                            <button class="btn btn-dots" onclick="event.stopPropagation(); showGroupOptions('${group.id}')" title="Options">⋮</button>
                             <span class="accordion-icon" id="icon-${group.id}">▼</span>
                         </div>
                     </div>
@@ -662,16 +647,6 @@
                     </div>
                 </div>
             `).join('');
-        }
-        
-        function showGroupOptions(groupId) {
-            // This could show a dropdown menu specific to the group
-            const options = confirm('Open group options?\nOK: Edit\nCancel: Delete');
-            if (options) {
-                openEditGroupModal(groupId);
-            } else {
-                deleteGroup(groupId);
-            }
         }
         
         function updateStats() {
