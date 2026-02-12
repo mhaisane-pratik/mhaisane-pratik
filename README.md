@@ -8,6 +8,19 @@ Check out my [Chat Search Application](./chat-search.html) - A simple, interacti
 - Add test messages to see it in action
 - Clean, modern UI with smooth animations
 
+## 📁 Group Management Accordion:
+Explore my [Group Management System](./group-accordion.html) - An interactive accordion interface with complete group management capabilities. Features include:
+- **Three-dot menu (⋮)** in the top-right corner with options:
+  - Create Group
+  - Clear All Groups
+  - Export Data
+- **Accordion interface** with expandable/collapsible sections
+- **Group creation** with name, description, and members
+- **Edit and delete** functionality for each group
+- **localStorage database** - All data persists across page refreshes
+- **Real-time statistics** showing total groups and last update time
+- Beautiful gradient UI with smooth animations
+
 
 ## 🌐 Socials:
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin&logoColor=white)](https://linkedin.com/in/https://www.linkedin.com/in/pratik-mhaisane/)

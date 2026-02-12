@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Group Management Accordion</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header h1 {
+            font-size: 2rem;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .menu-button {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .menu-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+        
+        .dropdown-menu {
+            position: absolute;
+            top: 50px;
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            min-width: 200px;
+            display: none;
+            z-index: 1000;
+        }
+        
+        .dropdown-menu.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .dropdown-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            color: #333;
+            transition: background 0.2s;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+        
+        .dropdown-item:hover {
+            background: #f8f9fa;
+        }
+        
+        .dropdown-item i {
+            margin-right: 10px;
+            color: #667eea;
+        }
+        
+        .accordion-container {
+            padding: 30px;
+        }
+        
+        .accordion-item {
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+        
+        .accordion-item:hover {
+            border-color: #667eea;
+        }
+        
+        .accordion-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: #f8f9fa;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .accordion-header:hover {
+            background: #e9ecef;
+        }
+        
+        .accordion-header.active {
+            background: #667eea;
+            color: white;
+        }
+        
+        .accordion-title {
+            font-weight: bold;
+            font-size: 1.1rem;
+            flex: 1;
+        }
+        
+        .accordion-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .accordion-icon {
+            font-size: 1.5rem;
+            transition: transform 0.3s;
+        }
+        
+        .accordion-icon.rotate {
+            transform: rotate(180deg);
+        }
+        
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: white;
+        }
+        
+        .accordion-content.show {
+            max-height: 500px;
+            border-top: 2px solid #e0e0e0;
+        }
+        
+        .accordion-body {
+            padding: 20px;
+        }
+        
+        .group-item {
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .group-info {
+            flex: 1;
+        }
+        
+        .group-name {
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+        
+        .group-description {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .group-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+        
+        .btn-edit {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-edit:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+        
+        .btn-delete {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .btn-delete:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+        
+        .btn-dots {
+            background: transparent;
+            border: 2px solid #667eea;
+            color: #667eea;
+            padding: 5px 12px;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        
+        .btn-dots:hover {
+            background: #667eea;
+            color: white;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal.show {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            animation: modalSlide 0.3s ease;
+        }
+        
+        @keyframes modalSlide {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .modal-header {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+            padding: 12px 25px;
+        }
+        
+        .btn-primary:hover {
+            background: #5568d3;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            padding: 12px 25px;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: #ccc;
+        }
+        
+        .stats {
+            padding: 20px 30px;
+            background: #f8f9fa;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .stat-number {
+            font-weight: bold;
+            color: #667eea;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📁 Group Management</h1>
+            <div class="header-actions">
+                <button class="menu-button" onclick="toggleMenu()" title="Menu">
+                    ⋮
+                    <div class="dropdown-menu" id="mainMenu">
+                        <div class="dropdown-item" onclick="openCreateGroupModal()">
+                            <span>➕</span> Create Group
+                        </div>
+                        <div class="dropdown-item" onclick="clearAllGroups()">
+                            <span>🗑️</span> Clear All Groups
+                        </div>
+                        <div class="dropdown-item" onclick="exportGroups()">
+                            <span>📤</span> Export Data
+                        </div>
+                    </div>
+                </button>
+            </div>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-item">
+                <span>Total Groups:</span>
+                <span class="stat-number" id="totalGroups">0</span>
+            </div>
+            <div class="stat-item">
+                <span>Last Updated:</span>
+                <span id="lastUpdated">Never</span>
+            </div>
+        </div>
+        
+        <div class="accordion-container" id="accordionContainer">
+            <!-- Accordion items will be dynamically inserted here -->
+        </div>
+    </div>
+    
+    <!-- Create/Edit Group Modal -->
+    <div class="modal" id="groupModal">
+        <div class="modal-content">
+            <div class="modal-header" id="modalTitle">Create New Group</div>
+            <form id="groupForm" onsubmit="saveGroup(event)">
+                <div class="form-group">
+                    <label for="groupName">Group Name *</label>
+                    <input type="text" id="groupName" required placeholder="Enter group name">
+                </div>
+                <div class="form-group">
+                    <label for="groupDescription">Description</label>
+                    <textarea id="groupDescription" placeholder="Enter group description"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="groupMembers">Members (comma-separated)</label>
+                    <input type="text" id="groupMembers" placeholder="e.g., Alice, Bob, Charlie">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Group</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        // Database simulation using localStorage
+        const DB_KEY = 'groupAccordionData';
+        let currentEditId = null;
+        
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            loadGroups();
+            updateStats();
+            
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.menu-button')) {
+                    document.getElementById('mainMenu').classList.remove('show');
+                }
+            });
+        });
+        
+        // Database functions
+        function getDatabase() {
+            const data = localStorage.getItem(DB_KEY);
+            return data ? JSON.parse(data) : { groups: [] };
+        }
+        
+        function saveDatabase(data) {
+            localStorage.setItem(DB_KEY, JSON.stringify(data));
+            updateStats();
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        // Menu functions
+        function toggleMenu() {
+            const menu = document.getElementById('mainMenu');
+            menu.classList.toggle('show');
+        }
+        
+        // Modal functions
+        function openCreateGroupModal() {
+            currentEditId = null;
+            document.getElementById('modalTitle').textContent = 'Create New Group';
+            document.getElementById('groupForm').reset();
+            document.getElementById('groupModal').classList.add('show');
+            toggleMenu();
+        }
+        
+        function openEditGroupModal(groupId) {
+            const db = getDatabase();
+            const group = db.groups.find(g => g.id === groupId);
+            
+            if (group) {
+                currentEditId = groupId;
+                document.getElementById('modalTitle').textContent = 'Edit Group';
+                document.getElementById('groupName').value = group.name;
+                document.getElementById('groupDescription').value = group.description || '';
+                document.getElementById('groupMembers').value = group.members ? group.members.join(', ') : '';
+                document.getElementById('groupModal').classList.add('show');
+            }
+        }
+        
+        function closeModal() {
+            document.getElementById('groupModal').classList.remove('show');
+            currentEditId = null;
+        }
+        
+        // Group functions
+        function saveGroup(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('groupName').value.trim();
+            const description = document.getElementById('groupDescription').value.trim();
+            const membersInput = document.getElementById('groupMembers').value.trim();
+            const members = membersInput ? membersInput.split(',').map(m => m.trim()).filter(m => m) : [];
+            
+            const db = getDatabase();
+            
+            if (currentEditId) {
+                // Edit existing group
+                const group = db.groups.find(g => g.id === currentEditId);
+                if (group) {
+                    group.name = name;
+                    group.description = description;
+                    group.members = members;
+                    group.updatedAt = new Date().toISOString();
+                }
+            } else {
+                // Create new group
+                const newGroup = {
+                    id: Date.now().toString(),
+                    name: name,
+                    description: description,
+                    members: members,
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                };
+                db.groups.push(newGroup);
+            }
+            
+            saveDatabase(db);
+            loadGroups();
+            closeModal();
+        }
+        
+        function deleteGroup(groupId) {
+            if (confirm('Are you sure you want to delete this group?')) {
+                const db = getDatabase();
+                db.groups = db.groups.filter(g => g.id !== groupId);
+                saveDatabase(db);
+                loadGroups();
+            }
+        }
+        
+        function clearAllGroups() {
+            if (confirm('Are you sure you want to delete ALL groups? This action cannot be undone.')) {
+                saveDatabase({ groups: [] });
+                loadGroups();
+            }
+            toggleMenu();
+        }
+        
+        function exportGroups() {
+            const db = getDatabase();
+            const dataStr = JSON.stringify(db, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `groups_export_${new Date().getTime()}.json`;
+            link.click();
+            URL.revokeObjectURL(url);
+            toggleMenu();
+        }
+        
+        // Accordion functions
+        function toggleAccordion(groupId) {
+            const content = document.getElementById(`content-${groupId}`);
+            const icon = document.getElementById(`icon-${groupId}`);
+            const header = document.getElementById(`header-${groupId}`);
+            
+            content.classList.toggle('show');
+            icon.classList.toggle('rotate');
+            header.classList.toggle('active');
+        }
+        
+        // Render functions
+        function loadGroups() {
+            const db = getDatabase();
+            const container = document.getElementById('accordionContainer');
+            
+            if (db.groups.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div style="font-size: 3rem; margin-bottom: 20px;">📭</div>
+                        <h3>No groups yet</h3>
+                        <p>Click the three dots (⋮) in the top right to create your first group</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = db.groups.map(group => `
+                <div class="accordion-item">
+                    <div class="accordion-header" id="header-${group.id}" onclick="toggleAccordion('${group.id}')">
+                        <div class="accordion-title">${escapeHtml(group.name)}</div>
+                        <div class="accordion-actions">
+                            <button class="btn btn-dots" onclick="event.stopPropagation(); showGroupOptions('${group.id}')" title="Options">⋮</button>
+                            <span class="accordion-icon" id="icon-${group.id}">▼</span>
+                        </div>
+                    </div>
+                    <div class="accordion-content" id="content-${group.id}">
+                        <div class="accordion-body">
+                            ${group.description ? `
+                                <div style="margin-bottom: 15px;">
+                                    <strong>Description:</strong>
+                                    <p style="color: #666; margin-top: 5px;">${escapeHtml(group.description)}</p>
+                                </div>
+                            ` : ''}
+                            ${group.members && group.members.length > 0 ? `
+                                <div style="margin-bottom: 15px;">
+                                    <strong>Members (${group.members.length}):</strong>
+                                    <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px;">
+                                        ${group.members.map(member => `
+                                            <span style="background: #667eea; color: white; padding: 5px 12px; border-radius: 15px; font-size: 0.85rem;">
+                                                ${escapeHtml(member)}
+                                            </span>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            ` : ''}
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 15px; border-top: 1px solid #e0e0e0;">
+                                <div style="font-size: 0.85rem; color: #999;">
+                                    Created: ${new Date(group.createdAt).toLocaleDateString()}
+                                </div>
+                                <div style="display: flex; gap: 10px;">
+                                    <button class="btn btn-edit" onclick="openEditGroupModal('${group.id}')">Edit</button>
+                                    <button class="btn btn-delete" onclick="deleteGroup('${group.id}')">Delete</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function showGroupOptions(groupId) {
+            // This could show a dropdown menu specific to the group
+            const options = confirm('Open group options?\nOK: Edit\nCancel: Delete');
+            if (options) {
+                openEditGroupModal(groupId);
+            } else {
+                deleteGroup(groupId);
+            }
+        }
+        
+        function updateStats() {
+            const db = getDatabase();
+            document.getElementById('totalGroups').textContent = db.groups.length;
+            
+            if (db.groups.length > 0) {
+                const latest = db.groups.reduce((a, b) => 
+                    new Date(a.updatedAt) > new Date(b.updatedAt) ? a : b
+                );
+                document.getElementById('lastUpdated').textContent = 
+                    new Date(latest.updatedAt).toLocaleString();
+            } else {
+                document.getElementById('lastUpdated').textContent = 'Never';
+            }
+        }
+    </script>
+</body>
+</html>
